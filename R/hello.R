@@ -30,7 +30,7 @@ data$Listing.Contract.Date <- as.Date(data$Listing.Contract.Date, format = "%Y-%
 data$Month_Int <- as.numeric(strftime(data$Listing.Contract.Date,"%m"))
 data$Month_Char <- month.abb[data$Month_Int]
 data$Month_Char <- factor(data$Month_Char, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ))
-#groups_zipcode <- with(data, split(data, list(Zip.Code, Month_Char)))
+groups_zipcode <- with(data, split(data, list(Zip.Code, Month_Char)))
 
 
 summary_inventory_leased <- lapply(groups_zipcode, nrow)
@@ -38,8 +38,12 @@ summary_inventory_leased
 #summary_quantile <- lapply(groups_zipcode, function(group){quantile(group)})
 #summary_mean <- lapply(groups_zipcode, function(group){mean(group)})
 
-inventory_graph <- ggplot(data = data, aes(x=Month_Char, fill = as.factor(Zip.Code))) + geom_histogram()
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+inventory_graph <- ggplot(data = data, aes(x=Month_Char, fill = as.factor(Zip.Code))) + geom_histogram(position = "dodge") + scale_fill_manual(values=cbPalette)
 inventory_graph
+
+#price_boxplot <- ggplot(data = data, aes(x=Month_Char, y= as.numeric(Close.Price), fill = as.factor(Zip.Code))) + geom_boxplot()
+#price_boxplot
 
 # Create Data
 # Time <- seq(as.Date("2003/8/6"), as.Date("2011/8/5"), by = "2 weeks")
@@ -102,7 +106,7 @@ inventory_graph
 
 
 #Zipcodes: 75013, 75025, 75035, 75070, 75071, 75075, 75093
-#Zipcodes2: c
+#Zipcodes2:
 #657/12=54.75 inventory turnover 2014
 #714/12 =59.25
 #December 2014 37
